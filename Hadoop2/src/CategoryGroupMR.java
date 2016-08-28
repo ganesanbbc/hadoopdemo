@@ -86,10 +86,17 @@ public class CategoryGroupMR {
 
 	public static void main(String[] args) throws Exception {
 
-		if (args.length != 2) {
+		if (args.length != 3) {
 			System.err.println("Insufficient args");
 			System.exit(-1);
 		}
+		
+		String input = args[0];
+		String output = args[1];
+		int numReduceTasks = Integer.parseInt(args[2]);
+		
+		System.out.println("numReduceTasks::"+numReduceTasks);
+		
 		Configuration conf = new Configuration();
 
 		conf.set("mapred.job.tracker", "hdfs://localhost:50001");
@@ -107,7 +114,7 @@ public class CategoryGroupMR {
 
 		job.setMapperClass(MapperDemo.class);
 		job.setReducerClass(ReducerDemo.class);
-		job.setNumReduceTasks(1);
+		job.setNumReduceTasks(numReduceTasks);
 		job.setInputFormatClass(TextInputFormat.class); // default -- inputkey
 														// type -- longwritable
 														// : valuetype is text
