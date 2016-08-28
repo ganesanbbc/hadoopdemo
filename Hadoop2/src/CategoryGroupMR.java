@@ -14,7 +14,7 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
-public class WordCountMR {
+public class CategoryGroupMR {
 
 	public static class MapperDemo extends Mapper<LongWritable, Text, Text, IntWritable> {
 
@@ -96,7 +96,7 @@ public class WordCountMR {
 		// conf.set("DrugName", args[3]);
 		Job job = new Job(conf, "Drug Amount Spent");
 
-		job.setJarByClass(WordCountMR.class); // class conmtains mapper and
+		job.setJarByClass(CategoryGroupMR.class); // class conmtains mapper and
 												// reducer class
 
 		job.setMapOutputKeyClass(Text.class); // map output key class
