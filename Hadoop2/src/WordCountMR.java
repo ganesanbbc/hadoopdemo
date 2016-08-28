@@ -1,5 +1,4 @@
 
-
 import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
@@ -17,35 +16,71 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 public class WordCountMR {
 
-	public static class MapperDemo extends
-			Mapper<LongWritable, Text, Text, IntWritable> {
+	public static class MapperDemo extends Mapper<LongWritable, Text, Text, IntWritable> {
+
+		@Override
+		protected void cleanup(Mapper<LongWritable, Text, Text, IntWritable>.Context context)
+				throws IOException, InterruptedException {
+			super.cleanup(context);
+		}
+
+		@Override
+		public void run(Mapper<LongWritable, Text, Text, IntWritable>.Context context)
+				throws IOException, InterruptedException {
+			super.run(context);
+		}
+
+		@Override
+		protected void setup(Mapper<LongWritable, Text, Text, IntWritable>.Context context)
+				throws IOException, InterruptedException {
+			super.setup(context);
+		}
 
 		// setup , map, run, cleanup
-		public void map(LongWritable key, Text value, Context context)
-				throws IOException, InterruptedException {
-		
+		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+
 			String line = value.toString();
 			String[] elements = line.split(",");
 
-				Text tx = new Text(elements[2]);
-				int i = Integer.parseInt(elements[4]);
-				IntWritable it = new IntWritable(i);
-				context.write(tx, it);
+			Text tx = new Text(elements[2]);
+			int i = Integer.parseInt(elements[4]);
+			IntWritable it = new IntWritable(i);
+			context.write(tx, it);
 		}
 	}
 
-	public static class ReducerDemo extends
-			Reducer<Text, IntWritable, Text, IntWritable> {
+	public static class ReducerDemo extends Reducer<Text, IntWritable, Text, IntWritable> {
 
 		// setup, reduce, run, cleanup
 		// innput - para [150,100]
-		public void reduce(Text key, Iterable<IntWritable> values,
-				Context context) throws IOException, InterruptedException {
+		
+		
+		
+		public void reduce(Text key, Iterable<IntWritable> values, Context context)
+				throws IOException, InterruptedException {
 			int sum = 0;
 			for (IntWritable val : values) {
 				sum += val.get();
 			}
 			context.write(key, new IntWritable(sum));
+		}
+
+		@Override
+		protected void cleanup(Reducer<Text, IntWritable, Text, IntWritable>.Context context)
+				throws IOException, InterruptedException {
+			super.cleanup(context);
+		}
+
+		@Override
+		public void run(Reducer<Text, IntWritable, Text, IntWritable>.Context context)
+				throws IOException, InterruptedException {
+			super.run(context);
+		}
+
+		@Override
+		protected void setup(Reducer<Text, IntWritable, Text, IntWritable>.Context context)
+				throws IOException, InterruptedException {
+			super.setup(context);
 		}
 	}
 
@@ -58,12 +93,12 @@ public class WordCountMR {
 		Configuration conf = new Configuration();
 
 		conf.set("mapred.job.tracker", "hdfs://localhost:50001");
-//		conf.set("DrugName", args[3]);
+		// conf.set("DrugName", args[3]);
 		Job job = new Job(conf, "Drug Amount Spent");
 
 		job.setJarByClass(WordCountMR.class); // class conmtains mapper and
 												// reducer class
-		
+
 		job.setMapOutputKeyClass(Text.class); // map output key class
 		job.setMapOutputValueClass(IntWritable.class);// map output value class
 		job.setOutputKeyClass(Text.class); // output key type in reducer
