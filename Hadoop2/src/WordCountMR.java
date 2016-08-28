@@ -17,13 +17,13 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 public class WordCountMR {
 
-	public static class MapDemohadoop extends
+	public static class MapperDemo extends
 			Mapper<LongWritable, Text, Text, IntWritable> {
 
 		// setup , map, run, cleanup
-
 		public void map(LongWritable key, Text value, Context context)
 				throws IOException, InterruptedException {
+		
 			String line = value.toString();
 			String[] elements = line.split(",");
 
@@ -34,7 +34,7 @@ public class WordCountMR {
 		}
 	}
 
-	public static class Reducedd extends
+	public static class ReducerDemo extends
 			Reducer<Text, IntWritable, Text, IntWritable> {
 
 		// setup, reduce, run, cleanup
@@ -70,8 +70,8 @@ public class WordCountMR {
 		job.setOutputValueClass(IntWritable.class);// output value type in
 													// reducer
 
-		job.setMapperClass(MapDemohadoop.class);
-		job.setReducerClass(Reducedd.class);
+		job.setMapperClass(MapperDemo.class);
+		job.setReducerClass(ReducerDemo.class);
 		job.setNumReduceTasks(1);
 		job.setInputFormatClass(TextInputFormat.class); // default -- inputkey
 														// type -- longwritable
