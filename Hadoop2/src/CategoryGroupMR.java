@@ -17,30 +17,62 @@ import reducer.DefaultReducerDemo;
 
 public class CategoryGroupMR {
 
+	private static boolean enableDSMode = false;
+
+	/**
+	 * @param args
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception {
 
 		int numReduceTasks = (args.length >= 1) ? Integer.parseInt(args[0]) : 1;
 		System.out.println("numReduceTasks::" + numReduceTasks);
 
 		Configuration conf = new Configuration();
-		conf.set("mapred.job.tracker", "hdfs://localhost:50001");
+		
+		if (enableDSMode)
+			conf.set("mapred.job.tracker", "hdfs://localhost:50001");
 
+		
 		Job job = new Job(conf, "Drug Amount Spent");
-		job.setJarByClass(CategoryGroupMR.class);
+		
+		if (enableDSMode)
+			job.setJarByClass(CategoryGroupMR.class);
 
-		 setMapOutputKey(job);
-		 setDefaultReducer(job);
-		 setDefaultMapper(job);
-		 setCustomPartitioner(job);
-		 setReducerCount(numReduceTasks, job);
+		setMapOutputKey(job);
+		setDefaultReducer(job);
+		setDefaultMapper(job);
+//		setCustomPartitioner(job);
+		setReducerCount(numReduceTasks, job);
 
 		// default -- inputkey type -- longwritable: valuetype is text
 		defaultInputOutputFormat(job);
+
+		if(enableDSMode){
+			setDistributedOutputParam(job);
+		}else{
+			setLocalOutputParam(job);
+		}
 		
-		setOutputParam(job);
 
 		job.waitForCompletion(true);
 
+	}
+
+	private static void setLocalOutputParam(Job job) {
+		String input = "/Users/varshika/Ganesan/Hadoop/Workspace/data/data.txt";
+		String output = "/Users/varshika/Ganesan/Hadoop/Workspace/data/out_" + System.currentTimeMillis();
+
+		try {
+		
+			FileInputFormat.addInputPath(job, new Path(input));
+			FileOutputFormat.setOutputPath(job, new Path(output));
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	private static void setReducerCount(int numReduceTasks, Job job) {
@@ -64,7 +96,7 @@ public class CategoryGroupMR {
 		job.setOutputValueClass(IntWritable.class);
 	}
 
-	private static void setOutputParam(Job job) throws IOException {
+	private static void setDistributedOutputParam(Job job) throws IOException {
 		String input = "/data/data.txt";
 		String output = "/data/out_" + System.currentTimeMillis();
 		FileInputFormat.addInputPath(job, new Path(input));
