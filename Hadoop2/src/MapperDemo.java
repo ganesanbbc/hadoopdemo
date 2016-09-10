@@ -27,6 +27,7 @@ public class MapperDemo extends Mapper<LongWritable, Text, Text, IntWritable> {
 	}
 
 	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+		System.out.println("KEY::"+key+"\nVALUES::"+value);
 		String line = value.toString();
 		String[] elements = line.split(",");
 

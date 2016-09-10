@@ -19,6 +19,7 @@ public class CategoryGroupMR {
 		}
 
 		String input = "/data/data.txt";
+		
 		String output = "/data/out_" + System.currentTimeMillis();
 		int numReduceTasks = Integer.parseInt(args[0]);
 
@@ -40,10 +41,16 @@ public class CategoryGroupMR {
 		// output value type in reducer
 		job.setOutputValueClass(IntWritable.class);
 
+		job.setNumReduceTasks(numReduceTasks);
+		
+		
 		job.setMapperClass(MapperDemo.class);
 		job.setReducerClass(ReducerDemo.class);
-
-		job.setNumReduceTasks(numReduceTasks);
+		
+		//Default HashPartitioner<K2, V2>
+		job.setPartitionerClass(DrugPartitioner.class);
+		
+		
 		
 		// default -- inputkey type -- longwritable: valuetype is text
 		job.setInputFormatClass(TextInputFormat.class);

@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="/Users/varshika/hadoop-1.2.1/hadoop-client-1.2.1.jar"/>
-	<classpathentry kind="lib" path="/Users/varshika/hadoop-1.2.1/hadoop-core-1.2.1.jar"/>
+	<classpathentry kind="lib" path="/Users/varshika/hadoop-1.2.1/hadoop-core-1.2.1.jar" sourcepath="/Users/varshika/hadoop-1.2.1"/>
 	<classpathentry kind="lib" path="/Users/varshika/hadoop-1.2.1/lib/asm-3.2.jar"/>
 	<classpathentry kind="lib" path="/Users/varshika/hadoop-1.2.1/lib/aspectjrt-1.6.11.jar"/>
 	<classpathentry kind="lib" path="/Users/varshika/hadoop-1.2.1/lib/aspectjtools-1.6.11.jar"/>
