@@ -1,3 +1,4 @@
+package partitioner;
 import org.apache.hadoop.mapreduce.Partitioner;
 
 public class DrugPartitioner<K, V> extends Partitioner<K, V> {
