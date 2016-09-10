@@ -1,4 +1,6 @@
 
+import java.io.IOException;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -17,26 +19,40 @@ public class CategoryGroupMR {
 
 	public static void main(String[] args) throws Exception {
 
-		if (args.length != 1) {
-			System.err.println("Insufficient args");
-			System.exit(-1);
-		}
-
-		String input = "/data/data.txt";
-		
-		String output = "/data/out_" + System.currentTimeMillis();
-		int numReduceTasks = Integer.parseInt(args[0]);
-
+		int numReduceTasks = (args.length >= 1) ? Integer.parseInt(args[0]) : 1;
 		System.out.println("numReduceTasks::" + numReduceTasks);
 
-		
-		
 		Configuration conf = new Configuration();
 		conf.set("mapred.job.tracker", "hdfs://localhost:50001");
 
 		Job job = new Job(conf, "Drug Amount Spent");
 		job.setJarByClass(CategoryGroupMR.class);
 
+		 setMapOutputKey(job);
+		 setDefaultReducer(job);
+		 setDefaultMapper(job);
+		 setCustomPartitioner(job);
+		 setReducerCount(numReduceTasks, job);
+
+		// default -- inputkey type -- longwritable: valuetype is text
+		defaultInputOutputFormat(job);
+		
+		setOutputParam(job);
+
+		job.waitForCompletion(true);
+
+	}
+
+	private static void setReducerCount(int numReduceTasks, Job job) {
+		job.setNumReduceTasks(numReduceTasks);
+	}
+
+	private static void defaultInputOutputFormat(Job job) {
+		job.setInputFormatClass(TextInputFormat.class);
+		job.setOutputFormatClass(TextOutputFormat.class);
+	}
+
+	private static void setMapOutputKey(Job job) {
 		// output key type in Mapper
 		job.setMapOutputKeyClass(Text.class);
 		// output value type in Mapper
@@ -46,26 +62,25 @@ public class CategoryGroupMR {
 		job.setOutputKeyClass(Text.class);
 		// output value type in reducer
 		job.setOutputValueClass(IntWritable.class);
+	}
 
-		
-		
-		
-		job.setMapperClass(MapperDemo.class);
-		job.setReducerClass(DefaultReducerDemo.class);
-		
-		//Default HashPartitioner<K2, V2>
-		//job.setPartitionerClass(DrugPartitioner.class);
-		
-		job.setNumReduceTasks(numReduceTasks);
-		
-		// default -- inputkey type -- longwritable: valuetype is text
-		job.setInputFormatClass(TextInputFormat.class);
-		job.setOutputFormatClass(TextOutputFormat.class);
-
+	private static void setOutputParam(Job job) throws IOException {
+		String input = "/data/data.txt";
+		String output = "/data/out_" + System.currentTimeMillis();
 		FileInputFormat.addInputPath(job, new Path(input));
 		FileOutputFormat.setOutputPath(job, new Path(output));
+	}
 
-		job.waitForCompletion(true);
+	private static void setCustomPartitioner(Job job) {
+		job.setPartitionerClass(DrugPartitioner.class);
+	}
+
+	private static void setDefaultReducer(Job job) {
+		job.setReducerClass(DefaultReducerDemo.class);
+	}
+
+	private static void setDefaultMapper(Job job) {
+		job.setMapperClass(MapperDemo.class);
 
 	}
 
