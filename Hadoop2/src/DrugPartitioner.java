@@ -2,17 +2,23 @@ import org.apache.hadoop.mapreduce.Partitioner;
 
 public class DrugPartitioner<K, V> extends Partitioner<K, V> {
 
+	private static final int PART_00 = 0;
+	private static final int PART_01 = 1;
+	private static final int PART_02 = 2;
+
 	/** Use {@link Object#hashCode()} to partition. */
 	public int getPartition(K key, V value, int numReduceTasks) {
 		
-		// return (key.hashCode() & Integer.MAX_VALUE) % numReduceTasks;
+				
+//return (key.hashCode() & Integer.MAX_VALUE) % numReduceTasks;
+		
 		
 		if (key.toString().equalsIgnoreCase("paracetamol"))
-			return 0;
+			return PART_00;
 		else if (key.toString().equalsIgnoreCase("metacin"))
-			return 1;
+			return PART_01;
 		else
-			return 2;
+			return PART_02;
 	}
 	
 }

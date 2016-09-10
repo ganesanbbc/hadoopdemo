@@ -25,6 +25,8 @@ public class CategoryGroupMR {
 
 		System.out.println("numReduceTasks::" + numReduceTasks);
 
+		
+		
 		Configuration conf = new Configuration();
 		conf.set("mapred.job.tracker", "hdfs://localhost:50001");
 
@@ -45,7 +47,7 @@ public class CategoryGroupMR {
 		
 		
 		job.setMapperClass(MapperDemo.class);
-		job.setReducerClass(ReducerDemo.class);
+		job.setReducerClass(DefaultReducerDemo.class);
 		
 		//Default HashPartitioner<K2, V2>
 		job.setPartitionerClass(DrugPartitioner.class);
