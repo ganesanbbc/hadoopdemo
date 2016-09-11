@@ -1,4 +1,5 @@
 package partitioner;
+
 import org.apache.hadoop.mapreduce.Partitioner;
 
 public class CustomPartitioner<K, V> extends Partitioner<K, V> {
@@ -9,8 +10,7 @@ public class CustomPartitioner<K, V> extends Partitioner<K, V> {
 
 	/** Use {@link Object#hashCode()} to partition. */
 	public int getPartition(K key, V value, int numReduceTasks) {
-		
-		
+
 		if (key.toString().equalsIgnoreCase("paracetamol"))
 			return PART_00;
 		else if (key.toString().equalsIgnoreCase("metacin"))
@@ -18,5 +18,5 @@ public class CustomPartitioner<K, V> extends Partitioner<K, V> {
 		else
 			return PART_02;
 	}
-	
+
 }

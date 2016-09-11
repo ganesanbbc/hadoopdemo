@@ -17,6 +17,8 @@ import reducer.DefaultReducerDemo;
 
 public class CategoryGroupMR {
 
+	private static final String MAPRED_JOB_TRACKER = "mapred.job.tracker";
+	private static final String HDFS_LOCALHOST_50001 = "hdfs://localhost:50001";
 	private static boolean dsModeenabled = false;
 
 	public static void main(String[] args) throws Exception {
@@ -26,7 +28,7 @@ public class CategoryGroupMR {
 		Configuration conf = new Configuration();
 
 		if (dsModeenabled)
-			conf.set("mapred.job.tracker", "hdfs://localhost:50001");
+			conf.set(MAPRED_JOB_TRACKER, HDFS_LOCALHOST_50001);
 
 		Job job = new Job(conf, "Drug Amount Spent");
 
@@ -36,10 +38,10 @@ public class CategoryGroupMR {
 		setMapOutputKey(job);
 		setDefaultReducer(job);
 		setDefaultMapper(job);
-		
+
 		if (numReduceTasks >= 3)
 			setCustomPartitioner(job);
-		
+
 		setReducerCount(numReduceTasks, job);
 
 		// default -- inputkey type -- longwritable: valuetype is text
@@ -55,19 +57,21 @@ public class CategoryGroupMR {
 
 	}
 
-	private static void setLocalOutputParam(Job job) {
+	private static void setLocalOutputParam(Job job) throws IOException {
 		String input = "/Users/varshika/Ganesan/Hadoop/Workspace/data/data.txt";
 		String output = "/Users/varshika/Ganesan/Hadoop/Workspace/data/out_" + System.currentTimeMillis();
+		setPath(job, input, output);
+	}
 
-		try {
+	private static void setDistributedOutputParam(Job job) throws IOException {
+		String input = "/data/data.txt";
+		String output = "/data/out_" + System.currentTimeMillis();
+		setPath(job, input, output);
+	}
 
-			FileInputFormat.addInputPath(job, new Path(input));
-			FileOutputFormat.setOutputPath(job, new Path(output));
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	private static void setPath(Job job, String input, String output) throws IOException {
+		FileInputFormat.addInputPath(job, new Path(input));
+		FileOutputFormat.setOutputPath(job, new Path(output));
 	}
 
 	private static void setReducerCount(int numReduceTasks, Job job) {
@@ -89,13 +93,6 @@ public class CategoryGroupMR {
 		job.setOutputKeyClass(Text.class);
 		// output value type in reducer
 		job.setOutputValueClass(IntWritable.class);
-	}
-
-	private static void setDistributedOutputParam(Job job) throws IOException {
-		String input = "/data/data.txt";
-		String output = "/data/out_" + System.currentTimeMillis();
-		FileInputFormat.addInputPath(job, new Path(input));
-		FileOutputFormat.setOutputPath(job, new Path(output));
 	}
 
 	private static void setCustomPartitioner(Job job) {
