@@ -19,41 +19,35 @@ public class CategoryGroupMR {
 
 	private static boolean enableDSMode = false;
 
-	/**
-	 * @param args
-	 * @throws Exception
-	 */
 	public static void main(String[] args) throws Exception {
-
 		int numReduceTasks = (args.length >= 1) ? Integer.parseInt(args[0]) : 1;
 		System.out.println("numReduceTasks::" + numReduceTasks);
 
 		Configuration conf = new Configuration();
-		
+
 		if (enableDSMode)
 			conf.set("mapred.job.tracker", "hdfs://localhost:50001");
 
-		
 		Job job = new Job(conf, "Drug Amount Spent");
-		
+
 		if (enableDSMode)
 			job.setJarByClass(CategoryGroupMR.class);
 
 		setMapOutputKey(job);
 		setDefaultReducer(job);
 		setDefaultMapper(job);
-//		setCustomPartitioner(job);
+		if (numReduceTasks >= 3)
+			setCustomPartitioner(job);
 		setReducerCount(numReduceTasks, job);
 
 		// default -- inputkey type -- longwritable: valuetype is text
 		defaultInputOutputFormat(job);
 
-		if(enableDSMode){
+		if (enableDSMode) {
 			setDistributedOutputParam(job);
-		}else{
+		} else {
 			setLocalOutputParam(job);
 		}
-		
 
 		job.waitForCompletion(true);
 
@@ -64,15 +58,14 @@ public class CategoryGroupMR {
 		String output = "/Users/varshika/Ganesan/Hadoop/Workspace/data/out_" + System.currentTimeMillis();
 
 		try {
-		
+
 			FileInputFormat.addInputPath(job, new Path(input));
 			FileOutputFormat.setOutputPath(job, new Path(output));
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 
 	private static void setReducerCount(int numReduceTasks, Job job) {
