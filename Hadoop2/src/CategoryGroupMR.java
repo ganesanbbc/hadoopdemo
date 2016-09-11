@@ -16,10 +16,13 @@ import partitioner.CustomPartitioner;
 import reducer.DefaultReducerDemo;
 
 public class CategoryGroupMR {
+	
+	
+	
 
 	private static final String MAPRED_JOB_TRACKER = "mapred.job.tracker";
 	private static final String HDFS_LOCALHOST_50001 = "hdfs://localhost:50001";
-	private static boolean dsModeenabled = false;
+	private static boolean dsModeenabled = true;
 
 	public static void main(String[] args) throws Exception {
 		int numReduceTasks = (args.length >= 1) ? Integer.parseInt(args[0]) : 1;

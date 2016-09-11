@@ -5,10 +5,10 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Mapper.Context;
+
 
 public class MapperDemo extends Mapper<LongWritable, Text, Text, IntWritable> {
-
+	
 	@Override
 	protected void cleanup(Mapper<LongWritable, Text, Text, IntWritable>.Context context)
 			throws IOException, InterruptedException {
@@ -34,7 +34,16 @@ public class MapperDemo extends Mapper<LongWritable, Text, Text, IntWritable> {
 
 		Text tx = new Text(elements[2]);
 		int i = Integer.parseInt(elements[4]);
+		
 		IntWritable it = new IntWritable(i);
+		
+		
+		if(elements[3].equalsIgnoreCase("male")){
+			context.getCounter("Male","Count").increment(1);
+		}else{
+			context.getCounter("Female","Count").increment(1);
+		}
+		
 		context.write(tx, it);
 	}
 }
