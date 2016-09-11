@@ -20,6 +20,8 @@ public class CategoryGroupMR {
 	
 	
 
+	private static final String SPLIT_MAX_SIZE_BUFFER_SIZE = "33554432";
+	private static final String SPLIT_MIN_SIZE_BUFFER_SIZE = "128";
 	private static final String MAPRED_JOB_TRACKER = "mapred.job.tracker";
 	private static final String HDFS_LOCALHOST_50001 = "hdfs://localhost:50001";
 	private static boolean dsModeenabled = true;
@@ -30,8 +32,10 @@ public class CategoryGroupMR {
 
 		Configuration conf = new Configuration();
 
-		if (dsModeenabled)
+		if (dsModeenabled){
 			conf.set(MAPRED_JOB_TRACKER, HDFS_LOCALHOST_50001);
+			setSplitSize(conf);
+		}
 
 		Job job = new Job(conf, "Drug_Amount_Spent");
 
@@ -60,6 +64,11 @@ public class CategoryGroupMR {
 
 	}
 
+	private static void setSplitSize(Configuration conf) {
+		conf.set("mapred.max.split.size",SPLIT_MAX_SIZE_BUFFER_SIZE);
+//		conf.set("mapred.min.split.size",SPLIT_MIN_SIZE_BUFFER_SIZE);
+	}
+
 	private static void setLocalOutputParam(Job job) throws IOException {
 		String input = "/Users/varshika/Ganesan/Hadoop/Workspace/data/data.txt";
 		String output = "/Users/varshika/Ganesan/Hadoop/Workspace/data/out_" + System.currentTimeMillis();
@@ -68,6 +77,7 @@ public class CategoryGroupMR {
 
 	private static void setDistributedOutputParam(Job job) throws IOException {
 		String input = "/data/data.txt";
+//		String input = "/data/data_large.txt";
 		String output = "/data/out_" + System.currentTimeMillis();
 		setPath(job, input, output);
 	}
