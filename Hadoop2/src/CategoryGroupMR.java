@@ -12,7 +12,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 import mapper.MapperDemo;
-import partitioner.DrugPartitioner;
+import partitioner.CustomPartitioner;
 import reducer.DefaultReducerDemo;
 
 public class CategoryGroupMR {
@@ -36,8 +36,10 @@ public class CategoryGroupMR {
 		setMapOutputKey(job);
 		setDefaultReducer(job);
 		setDefaultMapper(job);
+		
 		if (numReduceTasks >= 3)
 			setCustomPartitioner(job);
+		
 		setReducerCount(numReduceTasks, job);
 
 		// default -- inputkey type -- longwritable: valuetype is text
@@ -97,7 +99,7 @@ public class CategoryGroupMR {
 	}
 
 	private static void setCustomPartitioner(Job job) {
-		job.setPartitionerClass(DrugPartitioner.class);
+		job.setPartitionerClass(CustomPartitioner.class);
 	}
 
 	private static void setDefaultReducer(Job job) {

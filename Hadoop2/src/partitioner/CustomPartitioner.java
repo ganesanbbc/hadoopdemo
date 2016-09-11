@@ -1,7 +1,7 @@
 package partitioner;
 import org.apache.hadoop.mapreduce.Partitioner;
 
-public class DrugPartitioner<K, V> extends Partitioner<K, V> {
+public class CustomPartitioner<K, V> extends Partitioner<K, V> {
 
 	private static final int PART_00 = 0;
 	private static final int PART_01 = 1;
