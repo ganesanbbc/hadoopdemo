@@ -30,7 +30,7 @@ public class CategoryGroupMR {
 		if (dsModeenabled)
 			conf.set(MAPRED_JOB_TRACKER, HDFS_LOCALHOST_50001);
 
-		Job job = new Job(conf, "Drug Amount Spent");
+		Job job = new Job(conf, "Drug_Amount_Spent");
 
 		if (dsModeenabled)
 			job.setJarByClass(CategoryGroupMR.class);
