@@ -17,7 +17,7 @@ import reducer.DefaultReducerDemo;
 
 public class CategoryGroupMR {
 
-	private static boolean enableDSMode = false;
+	private static boolean dsModeenabled = false;
 
 	public static void main(String[] args) throws Exception {
 		int numReduceTasks = (args.length >= 1) ? Integer.parseInt(args[0]) : 1;
@@ -25,12 +25,12 @@ public class CategoryGroupMR {
 
 		Configuration conf = new Configuration();
 
-		if (enableDSMode)
+		if (dsModeenabled)
 			conf.set("mapred.job.tracker", "hdfs://localhost:50001");
 
 		Job job = new Job(conf, "Drug Amount Spent");
 
-		if (enableDSMode)
+		if (dsModeenabled)
 			job.setJarByClass(CategoryGroupMR.class);
 
 		setMapOutputKey(job);
@@ -45,7 +45,7 @@ public class CategoryGroupMR {
 		// default -- inputkey type -- longwritable: valuetype is text
 		defaultInputOutputFormat(job);
 
-		if (enableDSMode) {
+		if (dsModeenabled) {
 			setDistributedOutputParam(job);
 		} else {
 			setLocalOutputParam(job);
