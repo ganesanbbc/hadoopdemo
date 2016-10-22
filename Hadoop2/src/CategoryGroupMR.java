@@ -34,7 +34,8 @@ public class CategoryGroupMR {
 
 		if (dsModeenabled){
 			conf.set(MAPRED_JOB_TRACKER, HDFS_LOCALHOST_50001);
-			setSplitSize(conf);
+			//Enable Split Logic
+			//setSplitSize(conf);
 		}
 
 		Job job = new Job(conf, "Drug_Amount_Spent");
@@ -45,6 +46,7 @@ public class CategoryGroupMR {
 		setMapOutputKey(job);
 		setDefaultReducer(job);
 		setDefaultMapper(job);
+		
 
 		if (numReduceTasks >= 3)
 			setCustomPartitioner(job);
@@ -76,8 +78,8 @@ public class CategoryGroupMR {
 	}
 
 	private static void setDistributedOutputParam(Job job) throws IOException {
-		String input = "/data/data.txt";
-//		String input = "/data/data_large.txt";
+//		String input = "/data/data.txt";
+		String input = "/data/bigdata.txt";
 		String output = "/data/out_" + System.currentTimeMillis();
 		setPath(job, input, output);
 	}
@@ -114,11 +116,13 @@ public class CategoryGroupMR {
 
 	private static void setDefaultReducer(Job job) {
 		job.setReducerClass(DefaultReducerDemo.class);
+		//Enable Combiner
+		job.setCombinerClass(DefaultReducerDemo.class);
+
 	}
 
 	private static void setDefaultMapper(Job job) {
-		job.setMapperClass(MapperDemo.class);
-
+		job.setMapperClass(MapperDemo.class);		
 	}
 
 }
