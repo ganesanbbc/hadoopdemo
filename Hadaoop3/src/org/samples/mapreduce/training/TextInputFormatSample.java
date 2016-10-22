@@ -19,6 +19,7 @@ public class TextInputFormatSample {
 		}
 //		testTextInputFileFormat(args[0],args[1]);
 		testSequenceTextInputFileFormat(args[0],args[1]);
+		
 	}
 
 	
