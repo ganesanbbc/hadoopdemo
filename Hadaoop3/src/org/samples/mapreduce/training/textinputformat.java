@@ -65,7 +65,7 @@ public class textinputformat {
 //		conf.set("DrugName", args[3]);
 		Job job = new Job(conf, "Drug Amount Spent");
 
-		job.setJarByClass(patientrxMR.class); // class conmtains mapper and
+		job.setJarByClass(textinputformat.class); // class conmtains mapper and
 												// reducer class
 		
 //		job.setMapOutputKeyClass(Text.class); // map output key class
