@@ -41,11 +41,9 @@ public class InputFormatSamples {
 		conf.set("mapred.job.tracker", "hdfs://localhost:50001");
 		Job job = new Job(conf, "Drug Amount Spent");
 		job.setJarByClass(InputFormatSamples.class); 
-		job.setNumReduceTasks(1);
-		
+		job.setNumReduceTasks(1);	
 		job.setInputFormatClass(TextInputFormat.class); 
 		job.setOutputFormatClass(SequenceFileOutputFormat.class);
-		
 		FileInputFormat.addInputPath(job, new Path(input));
 		FileOutputFormat.setOutputPath(job, new Path(output));
 		job.waitForCompletion(true);
